@@ -1,0 +1,61 @@
+================================================================================
+JAVA JDK - INSTALAÇÃO VIA HOMEBREW (Apple Silicon M1/M2)
+================================================================================
+
+O QUE É O JDK
+--------------------------------------------------------------------------------
+O JDK (Java Development Kit) é obrigatório para automação Android com Appium.
+A distribuição recomendada é o Eclipse Temurin (Adoptium) por ser gratuita,
+open-source e certificada para uso em projetos de automação de testes.
+
+
+VERIFICAR SE JÁ ESTÁ INSTALADO
+--------------------------------------------------------------------------------
+    java -version
+    echo $JAVA_HOME
+
+Se retornarem a versão 17.x com arquitetura arm64 e o caminho do JAVA_HOME,
+o JDK já está instalado corretamente. Pule para a seção de verificação.
+
+
+INSTALAÇÃO DO JDK 17 LTS
+--------------------------------------------------------------------------------
+Execute o comando abaixo no Terminal:
+
+    brew install --cask temurin@17
+
+
+CONFIGURAÇÃO DO JAVA_HOME
+--------------------------------------------------------------------------------
+Adicione as linhas abaixo ao arquivo ~/.zshrc:
+
+    echo 'export JAVA_HOME=$(/usr/libexec/java_home -v 17)' >> ~/.zshrc
+    echo 'export PATH="$JAVA_HOME/bin:$PATH"' >> ~/.zshrc
+    source ~/.zshrc
+
+
+VERIFICAÇÃO
+--------------------------------------------------------------------------------
+    java -version
+
+A saída esperada deve conter:
+    openjdk version "17.x.x"
+    OpenJDK 64-Bit Server VM ... (arm64)
+
+    echo $JAVA_HOME
+
+A saída esperada deve ser um caminho similar a:
+    /Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home
+
+
+ATENÇÃO
+--------------------------------------------------------------------------------
+  - NÃO utilize o JDK 11 neste projeto. O suporte ARM64 nativo só ficou
+    estável a partir do JDK 17.
+  - Sempre utilize a versão LTS (Long Term Support) para maior estabilidade
+    em ambiente de automação de testes.
+  - Após alterar o ~/.zshrc, sempre execute source ~/.zshrc ou abra um
+    novo terminal para que as variáveis de ambiente sejam aplicadas.
+
+
+================================================================================

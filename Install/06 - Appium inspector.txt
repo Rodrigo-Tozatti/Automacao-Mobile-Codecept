@@ -1,0 +1,78 @@
+================================================================================
+APPIUM INSPECTOR - INSTALAÇÃO (Apple Silicon M1/M2)
+================================================================================
+
+O QUE É O APPIUM INSPECTOR
+--------------------------------------------------------------------------------
+Appium Inspector é uma ferramenta visual (GUI) para inspecionar os elementos
+da interface dos aplicativos mobile. É essencial para identificar locators
+(IDs, XPaths, accessibility IDs) que serão utilizados na escrita dos testes
+automatizados com CodeceptJS.
+
+
+PRÉ-REQUISITO
+--------------------------------------------------------------------------------
+O Appium Inspector requer que o servidor Appium esteja instalado e em execução
+antes de ser utilizado. Certifique-se de que os passos do documento APPIUM
+foram concluídos com sucesso.
+
+
+DOWNLOAD E INSTALAÇÃO
+--------------------------------------------------------------------------------
+1. Acesse a página oficial de releases no GitHub:
+   https://github.com/appium/appium-inspector/releases
+
+2. Na lista de assets da versão mais recente, localize e baixe o arquivo
+   correto para Apple Silicon:
+
+   mac-arm64.dmg   →  para M1 e M2 (ARM64)
+
+   ATENÇÃO: NÃO baixe o arquivo mac-x64.dmg (esse é para Macs Intel).
+
+3. Após o download, abra o arquivo .dmg e arraste o ícone do
+   Appium Inspector para a pasta Applications.
+
+4. Abra o Appium Inspector pela pasta Applications.
+
+
+LIBERAÇÃO DE SEGURANÇA NO macOS
+--------------------------------------------------------------------------------
+Na primeira abertura, o macOS pode bloquear o aplicativo por ser de fonte
+externa. Caso isso ocorra, execute o comando abaixo no Terminal:
+
+    xattr -cr "/Applications/Appium Inspector.app"
+
+Ou acesse: Ajustes do Sistema → Privacidade e Segurança → Abrir Assim Mesmo.
+
+
+CONECTANDO AO SERVIDOR APPIUM
+--------------------------------------------------------------------------------
+Com o servidor Appium rodando (comando appium no Terminal), configure o
+Inspector com as seguintes informações na tela inicial:
+
+  Remote Host : 127.0.0.1
+  Remote Port : 4723
+  Remote Path : /
+
+Em seguida, preencha as Desired Capabilities do dispositivo ou emulador
+e clique em Start Session.
+
+
+VERSÃO MÍNIMA RECOMENDADA
+--------------------------------------------------------------------------------
+  - Para uso com Appium 2.x : versão 2025.3.1 ou superior
+  - Versão atual (maio/2026) : 2026.5.1
+  - Requisito de sistema     : macOS 12 ou superior
+
+
+ATENÇÃO
+--------------------------------------------------------------------------------
+  - NÃO instale o Appium Inspector via Homebrew. O cask appium-inspector
+    via Homebrew não é oficialmente suportado pelo time do Appium e está
+    programado para ser desativado.
+  - Sempre baixe diretamente da página de releases do GitHub oficial.
+  - Mantenha o Inspector atualizado junto com o Appium para evitar
+    incompatibilidades entre versões.
+
+
+================================================================================

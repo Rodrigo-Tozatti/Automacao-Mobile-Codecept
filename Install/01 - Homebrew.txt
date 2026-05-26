@@ -1,0 +1,72 @@
+================================================================================
+HOMEBREW - GERENCIADOR DE PACOTES macOS (Apple Silicon M1/M2)
+================================================================================
+
+PRÉ-REQUISITO
+--------------------------------------------------------------------------------
+Antes de instalar o Homebrew, garanta que as Xcode Command Line Tools estão
+instaladas. Caso não estejam, execute no Terminal:
+
+    xcode-select --install
+
+Aguarde a conclusão antes de prosseguir.
+
+
+VERIFICAR SE JÁ ESTÁ INSTALADO
+--------------------------------------------------------------------------------
+    brew --version
+
+Se retornar uma versão, o Homebrew já está instalado. Pule para a seção
+de verificação ao final deste documento.
+
+
+INSTALAÇÃO
+--------------------------------------------------------------------------------
+Cole o comando abaixo no Terminal e pressione ENTER:
+
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+Durante a instalação:
+  - Será solicitada a senha de administrador do Mac
+  - As Xcode Command Line Tools serão instaladas automaticamente se necessário
+  - Pressione ENTER quando solicitado para confirmar a instalação
+
+
+CONFIGURAÇÃO DO PATH (obrigatório no Apple Silicon)
+--------------------------------------------------------------------------------
+No M1/M2 o Homebrew é instalado em /opt/homebrew (diferente do Intel que
+utiliza /usr/local). É obrigatório adicionar ao PATH manualmente.
+
+Execute os comandos abaixo no Terminal:
+
+    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zshrc
+    source ~/.zshrc
+
+
+VERIFICAÇÃO
+--------------------------------------------------------------------------------
+    brew --version
+    brew doctor
+
+CARTHAGE 
+--------------------------------------------------------------------------------
+Carthage (dependências opcionais do XCUITest):
+    brew install carthage
+
+--------------------------------------------------------------------------------
+
+O comando brew doctor deve retornar:
+    Your system is ready to brew.
+
+Warnings podem ser ignorados. Erros (Error) devem ser resolvidos
+antes de prosseguir com as demais instalações.
+
+
+ATENÇÃO
+--------------------------------------------------------------------------------
+  - NUNCA utilize sudo brew. O Homebrew foi projetado para rodar sem root.
+  - O terminal padrão do macOS é zsh (arquivo ~/.zshrc). Caso utilize bash,
+    substitua ~/.zshrc por ~/.bash_profile na etapa de configuração do PATH.
+
+
+================================================================================
