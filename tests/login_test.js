@@ -7,6 +7,6 @@ Scenario('Cenário 01 - APP deve realizar login com sucesso', ({ I }) => {
     I.fill    // Preencher campo senha
     
     // Clicar botão Entrar
-
+    I.fillFild
     // Validar login com sucesso
 });
