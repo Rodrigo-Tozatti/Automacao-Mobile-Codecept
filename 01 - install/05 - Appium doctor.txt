@@ -1,0 +1,63 @@
+================================================================================
+APPIUM DOCTOR - DIAGNÓSTICO DO AMBIENTE (Apple Silicon M1/M2)
+================================================================================
+
+O QUE É O APPIUM DOCTOR
+--------------------------------------------------------------------------------
+Appium Doctor é a ferramenta de diagnóstico do ambiente Appium. Verifica se
+todas as dependências necessárias estão corretamente instaladas e configuradas,
+apontando o que está ok, o que está faltando e o que precisa ser corrigido.
+
+
+⚠️  LEIA ANTES DE COMEÇAR
+--------------------------------------------------------------------------------
+  - A partir do Appium 2.4.0, o appium-doctor standalone foi descontinuado.
+    NÃO instale o pacote appium-doctor via npm. Utilize os comandos de
+    diagnóstico integrados diretamente aos drivers, conforme descrito abaixo.
+  - Execute o doctor APÓS instalar o Android Studio e configurar o SDK,
+    pois muitas variáveis de ambiente só estarão disponíveis depois disso.
+  - Execute separadamente para Android e iOS para um diagnóstico completo.
+  - Corrija TODOS os itens em vermelho (✖) antes de iniciar os testes.
+    Itens em amarelo (⚠) não são bloqueantes mas são recomendados.
+
+
+VERIFICAÇÃO POR DRIVER (forma atual recomendada)
+--------------------------------------------------------------------------------
+Para verificar o ambiente Android (UiAutomator2):
+
+    appium driver doctor uiautomator2
+
+Para verificar o ambiente iOS (XCUITest):
+
+    appium driver doctor xcuitest
+
+
+INTERPRETANDO O RESULTADO
+--------------------------------------------------------------------------------
+O Appium Doctor retorna três tipos de indicadores:
+
+  ✔  (verde)    - Dependência encontrada e configurada corretamente.
+  ✖  (vermelho) - Dependência ausente ou com erro. Deve ser corrigida.
+  ⚠  (amarelo)  - Aviso. Não é bloqueante, mas é recomendado corrigir.
+
+Apenas os itens com ✖ (vermelho) impedem a execução dos testes.
+
+
+DEPENDÊNCIAS VERIFICADAS PARA ANDROID
+--------------------------------------------------------------------------------
+  - Java JDK (JAVA_HOME configurado)
+  - Android SDK (ANDROID_HOME configurado)
+  - Android Studio instalado
+  - ADB (Android Debug Bridge) disponível no PATH
+  - Emulador ou dispositivo físico acessível
+
+
+DEPENDÊNCIAS VERIFICADAS PARA iOS
+--------------------------------------------------------------------------------
+  - Xcode instalado e atualizado
+  - Xcode Command Line Tools
+  - Carthage (opcional, mas recomendado)
+  - Simulador iOS disponível
+
+
+================================================================================

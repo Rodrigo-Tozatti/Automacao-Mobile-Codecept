@@ -1,0 +1,142 @@
+================================================================================
+CODECEPTJS - INSTALAÇÃO PARA TESTES MOBILE COM APPIUM (Apple Silicon M1/M2)
+================================================================================
+
+O QUE É O CODECEPTJS
+--------------------------------------------------------------------------------
+CodeceptJS é um framework de testes end-to-end para Node.js que suporta
+automação mobile via Appium. Ele oferece uma sintaxe simples e legível,
+suporte a BDD com Gherkin, Page Objects, relatórios e integração nativa
+com o Appium para testes em dispositivos Android e iOS.
+
+
+⚠️  LEIA ANTES DE COMEÇAR
+--------------------------------------------------------------------------------
+  - Certifique-se de que o npm init já foi executado na pasta do projeto
+    e que o arquivo package.json existe antes de prosseguir.
+    (documento: CRIANDO O PROJETO - NPM INIT)
+  - O CodeceptJS para mobile requer o WebDriverIO instalado junto.
+    NÃO instale o CodeceptJS sem o WebDriverIO para projetos mobile.
+  - O Appium deve estar instalado globalmente e os drivers uiautomator2
+    e xcuitest devem estar instalados antes de inicializar o projeto.
+    (documento: APPIUM)
+  - NUNCA instale pacotes com sudo npm. Isso causa erros de permissão.
+  - Certifique-se de estar dentro da pasta do projeto antes de executar
+    qualquer comando:
+      pwd
+
+
+PRÉ-REQUISITOS
+--------------------------------------------------------------------------------
+Confirme que os seguintes itens estão instalados e configurados:
+  ✔ Node.js e npm    (documento: NODE)
+  ✔ Java JDK 17      (documento: JAVA)
+  ✔ Android Studio   (documento: ANDROID STUDIO)
+  ✔ Xcode            (documento: XCODE)
+  ✔ Appium 2.x       (documento: APPIUM)
+  ✔ Variáveis de ambiente configuradas (documento: VARIÁVEIS DE AMBIENTE)
+  ✔ package.json criado na pasta do projeto (documento: NPM INIT)
+
+
+PASSO 1 — INSTALAR O CODECEPTJS COM WEBDRIVERIO
+--------------------------------------------------------------------------------
+Dentro da pasta do projeto, execute:
+
+    npm install codeceptjs webdriverio --save-dev
+
+Aguarde a conclusão do download e instalação das dependências.
+
+Verifique se foram instalados corretamente:
+
+    npx codeceptjs --version
+
+
+PASSO 2 — INICIALIZAR O CODECEPTJS NO PROJETO
+--------------------------------------------------------------------------------
+Execute o comando de inicialização:
+
+    npx codeceptjs init
+
+O terminal exibirá uma série de perguntas. Responda conforme abaixo:
+
+  Onde estão seus testes?
+  → Pressione Enter para aceitar o padrão (./*_test.js)
+     ou informe o caminho desejado (ex: ./tests/**/*_test.js)
+
+  Qual helper deseja utilizar?
+  → Use as setas para selecionar "Appium" e pressione Espaço para marcar
+  → Pressione Enter para confirmar
+
+  Qual a URL base da aplicação?
+  → Pressione Enter (não aplicável para apps mobile nativos)
+
+  [Appium] Qual a plataforma?
+  → Digite: Android  ou  iOS
+
+  [Appium] Caminho ou URL do arquivo da aplicação?
+  → Informe o caminho do .apk (Android) ou .ipa (iOS)
+     Exemplo Android : ./apps/meu-app.apk
+     Exemplo iOS     : ./apps/meu-app.ipa
+
+  Onde salvar os relatórios de saída?
+  → Pressione Enter para aceitar o padrão (./output)
+
+  Deseja adicionar suporte a plugins?
+  → Pressione Enter para aceitar o padrão
+
+Ao final, o CodeceptJS criará os seguintes arquivos na pasta do projeto:
+  codecept.conf.js  → arquivo de configuração principal
+  steps_file.js     → arquivo de steps customizados
+  steps.d.ts        → arquivo de tipagem para autocomplete
+
+
+PASSO 3 — VERIFICAR O ARQUIVO DE CONFIGURAÇÃO GERADO
+--------------------------------------------------------------------------------
+Abra o arquivo codecept.conf.js gerado e verifique se o helper Appium
+está configurado corretamente:
+
+    const { setHeadlessWhen, setCommonPlugins } = require('@codeceptjs/configure');
+
+    setHeadlessWhen(process.env.HEADLESS);
+
+    setCommonPlugins();
+
+    /** @type {CodeceptJS.MainConfig} */
+    exports.config = {
+    tests: './tests/*_test.js',
+    output: './output',
+    helpers: {
+        Appium: {
+        app: 'http://localhost',
+        platform: 'Android',
+        device: 'emulator'
+        }
+    },
+    include: {
+        I: './steps_file.js'
+    },
+    noGlobals: true,
+    plugins: {},
+    name: 'Automacao-Mobile-Codecept'
+    }
+
+
+PASSO 4 — VERIFICAR O steps_file
+--------------------------------------------------------------------------------
+Abra o arquivo steps_file.js gerado e verifique se está configurado corretamente:
+
+    const { actor } = require('codeceptjs');
+
+    module.exports = actor({
+    // Define custom steps here, use them in tests.
+    // Actor is an instance of I object
+    });
+
+
+PASSO 5 - VERIFICAR SE O CONGIG ESTÁ correto
+--------------------------------------------------------------------------------
+Execute o comando de inicialização:
+
+    npx codeceptjs run --steps
+    
+================================================================================

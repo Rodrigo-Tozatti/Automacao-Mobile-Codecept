@@ -1,0 +1,76 @@
+================================================================================
+APPIUM - INSTALAÇÃO VIA NPM (Apple Silicon M1/M2)
+================================================================================
+
+O QUE É O APPIUM
+--------------------------------------------------------------------------------
+Appium é o servidor de automação mobile open-source que recebe os comandos dos
+testes e os traduz para ações nos dispositivos Android e iOS. É instalado
+globalmente via npm e roda como um servidor local na porta 4723.
+
+
+⚠️  LEIA ANTES DE COMEÇAR
+--------------------------------------------------------------------------------
+  - NUNCA instale o Appium com sudo. Isso causa erros de permissão.
+  - O Appium requer que o Node.js e o Java estejam instalados e configurados
+    corretamente antes de prosseguir com esta instalação.
+  - O Appium 2.x NÃO inclui drivers nativos. Os drivers para Android
+    (UiAutomator2) e iOS (XCUITest) devem ser instalados separadamente
+    após a instalação do servidor — os passos estão descritos abaixo.
+  - Se tiver o Appium 1.x instalado, remova-o antes de continuar:
+      npm uninstall -g appium
+
+
+VERIFICAR SE JÁ ESTÁ INSTALADO
+--------------------------------------------------------------------------------
+    appium --version
+
+Se retornar uma versão 2.x, o Appium já está instalado. Pule para a seção
+de verificação ao final deste documento.
+
+
+INSTALAÇÃO DO APPIUM
+--------------------------------------------------------------------------------
+Execute o comando abaixo no Terminal:
+
+    npm install -g appium
+
+Verifique a instalação:
+
+    appium --version
+
+
+INSTALAÇÃO DOS DRIVERS
+--------------------------------------------------------------------------------
+Após instalar o Appium, instale os drivers para cada plataforma:
+
+  Android (UiAutomator2):
+    appium driver install uiautomator2
+
+  iOS (XCUITest):
+    appium driver install xcuitest
+
+Verificar drivers instalados:
+
+    appium driver list --installed
+
+
+INICIANDO O SERVIDOR APPIUM
+--------------------------------------------------------------------------------
+Para subir o servidor manualmente no Terminal:
+
+    appium
+
+O servidor estará disponível em: http://localhost:4723
+Mantenha o Terminal aberto enquanto os testes estiverem rodando.
+
+
+VERIFICAÇÃO
+--------------------------------------------------------------------------------
+    appium --version              (esperado: 2.x.x)
+    appium driver list --installed
+
+A saída deve listar uiautomator2 e xcuitest como instalados.
+
+
+================================================================================

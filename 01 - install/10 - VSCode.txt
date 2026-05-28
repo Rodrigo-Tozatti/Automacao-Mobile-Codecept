@@ -1,0 +1,121 @@
+================================================================================
+VISUAL STUDIO CODE - INSTALAÇÃO E CONFIGURAÇÃO (Apple Silicon M1/M2)
+================================================================================
+
+O QUE É O VISUAL STUDIO CODE
+--------------------------------------------------------------------------------
+Visual Studio Code (VS Code) é um editor de código leve, gratuito e open-source
+desenvolvido pela Microsoft. É o editor mais recomendado para projetos de
+automação com CodeceptJS por oferecer suporte nativo a JavaScript/TypeScript,
+extensões para produtividade, terminal integrado e highlight de sintaxe para
+arquivos Gherkin (.feature).
+
+
+⚠️  LEIA ANTES DE COMEÇAR
+--------------------------------------------------------------------------------
+  - NÃO baixe a versão Intel (x64). Para M1 e M2, baixe exclusivamente
+    a versão Apple Silicon (arm64).
+  - O VS Code possui uma versão disponível também via Homebrew. Ambas
+    as formas são válidas — escolha apenas uma para evitar duplicidade.
+  - Após a instalação, é altamente recomendado instalar as extensões
+    listadas ao final deste documento para melhor experiência com o projeto.
+
+
+DOWNLOAD E INSTALAÇÃO (forma direta)
+--------------------------------------------------------------------------------
+1. Acesse a página oficial:
+   https://code.visualstudio.com
+
+2. Clique na seta ao lado do botão "Download Mac Universal" e selecione:
+
+   Apple Silicon (arm64)  →  para M1 e M2
+
+3. Após o download, abra o arquivo .zip e arraste o ícone do
+   Visual Studio Code para a pasta Applications.
+
+4. Abra o VS Code pela pasta Applications.
+
+
+INSTALAÇÃO VIA HOMEBREW (forma alternativa)
+--------------------------------------------------------------------------------
+Caso prefira instalar via Homebrew:
+
+    brew install --cask visual-studio-code
+
+
+CONFIGURANDO O COMANDO "code" NO TERMINAL
+--------------------------------------------------------------------------------
+Para abrir o VS Code diretamente pelo terminal com o comando code,
+é necessário instalar o comando de shell:
+
+  1. Abra o VS Code
+  2. Pressione  Command + Shift + P  para abrir a paleta de comandos
+  3. Digite:  Shell Command: Install 'code' command in PATH
+  4. Clique na opção exibida e aguarde a confirmação
+
+Verifique se o comando foi instalado corretamente:
+
+    code --version
+
+Para abrir uma pasta de projeto diretamente pelo terminal:
+
+    code .
+
+
+EXTENSÕES RECOMENDADAS PARA O PROJETO
+--------------------------------------------------------------------------------
+Instale as extensões abaixo pelo menu Extensions (Command + Shift + X):
+
+  ── CodeceptJS ────────────────────────────────────────────────────────────────
+
+  Codeception Snippets
+  → Snippets e autocomplete para comandos CodeceptJS e Codeception
+  → Pesquise por: codeception-snippets
+
+  VSCode-Codecept
+  → Suporte completo ao CodeceptJS no VS Code, incluindo navegação
+    entre steps e arquivos de teste
+  → Pesquise por: vscode-codecept
+
+  Codeception Test Adapter
+  → Integração dos testes CodeceptJS com o Test Explorer do VS Code,
+    permitindo visualizar e executar testes diretamente pelo editor
+  → Pesquise por: Codeception Test Adapter
+
+  ── Gherkin / BDD ─────────────────────────────────────────────────────────────
+
+  Cucumber (Gherkin) Full Support
+  → Highlight de sintaxe e autocomplete para arquivos .feature
+  → Autor: Alexander Krechik
+
+  ── Qualidade de Código ───────────────────────────────────────────────────────
+
+  ESLint
+  → Análise e padronização de código JavaScript
+  → Autor: Microsoft
+
+  Prettier - Code formatter
+  → Formatação automática de código
+  → Autor: Prettier
+
+  ── Produtividade ─────────────────────────────────────────────────────────────
+
+  GitLens
+  → Visualização avançada do histórico Git
+  → Autor: GitKraken
+
+  Material Icon Theme
+  → Ícones para melhor visualização dos arquivos do projeto
+  → Autor: Philipp Kief
+
+
+VERIFICAÇÃO
+--------------------------------------------------------------------------------
+    code --version
+
+A saída deve exibir a versão instalada do VS Code, por exemplo:
+    1.x.x
+    arm64
+
+
+================================================================================

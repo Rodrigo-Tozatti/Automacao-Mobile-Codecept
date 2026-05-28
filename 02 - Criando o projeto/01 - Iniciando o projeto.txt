@@ -1,0 +1,112 @@
+================================================================================
+CRIANDO O PROJETO - NPM INIT (Apple Silicon M1/M2)
+================================================================================
+
+O QUE É O NPM INIT
+--------------------------------------------------------------------------------
+O comando npm init é o ponto de partida de qualquer projeto Node.js. Ele cria
+o arquivo package.json na raiz do projeto, que é responsável por registrar
+todas as dependências, scripts e informações do projeto de automação com
+CodeceptJS.
+
+
+⚠️  LEIA ANTES DE COMEÇAR
+--------------------------------------------------------------------------------
+  - NUNCA execute o npm init fora da pasta do projeto. Isso cria arquivos
+    de configuração na raiz do usuário, causando erros de permissão nas
+    instalações seguintes.
+  - Certifique-se de que o Node.js e o npm estão instalados corretamente
+    antes de prosseguir (documento: NODE).
+  - Sempre confirme em qual pasta você está antes de executar qualquer
+    comando com:
+      pwd
+
+
+PASSO 1 — CRIAR A PASTA DO PROJETO
+--------------------------------------------------------------------------------
+Escolha um local para o projeto e crie a pasta via terminal:
+
+    mkdir nome-do-projeto
+
+Entre na pasta criada:
+
+    cd nome-do-projeto
+
+Confirme que está no local correto:
+
+    pwd
+
+A saída deve exibir o caminho completo da pasta do projeto, por exemplo:
+    /Users/SEU_USUARIO/MacBook-repositorio/nome-do-projeto
+
+
+PASSO 2 — INICIALIZAR O PROJETO
+--------------------------------------------------------------------------------
+Dentro da pasta do projeto, execute:
+
+    npm init
+
+O terminal exibirá uma série de perguntas. Você pode preencher conforme
+o seu projeto ou pressionar Enter para aceitar os valores padrão:
+
+    package name: (nome-do-projeto)   → Enter ou nome desejado
+    version: (1.0.0)                  → Enter
+    description:                      → Enter ou descrição do projeto
+    entry point: (index.js)           → Enter
+    test command:                      → Enter
+    git repository:                   → Enter
+    keywords:                         → Enter
+    author:                           → Enter ou seu nome
+    license: (ISC)                    → Enter
+
+Ao final, o npm exibirá o conteúdo do package.json gerado e perguntará:
+
+    Is this OK? (yes)                 → Enter para confirmar
+
+
+PASSO 3 — VERIFICAR O ARQUIVO GERADO
+--------------------------------------------------------------------------------
+Confirme que o package.json foi criado corretamente na pasta do projeto:
+
+    ls
+
+O arquivo package.json deve aparecer na listagem.
+
+Para visualizar o conteúdo do arquivo:
+
+    cat package.json
+
+A saída deve ser similar a:
+
+    {
+      "name": "nome-do-projeto",
+      "version": "1.0.0",
+      "description": "",
+      "main": "index.js",
+      "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+      },
+      "author": "",
+      "license": "ISC"
+    }
+
+
+SOLUÇÃO DE PROBLEMAS COMUNS
+--------------------------------------------------------------------------------
+Problema: npm error EACCES permission denied package-lock.json
+Solução:  O npm init foi executado fora da pasta do projeto, gerando
+          arquivos na raiz do usuário. Remova os arquivos gerados
+          incorretamente e repita o processo dentro da pasta correta:
+
+            rm -f ~/package.json ~/package-lock.json
+            sudo rm -rf ~/node_modules
+            cd nome-do-projeto
+            npm init
+
+Problema: npm: command not found
+Solução:  O Node.js não está instalado ou não foi carregado corretamente.
+          Execute source ~/.zshrc e tente novamente. Se persistir,
+          consulte o documento NODE.
+
+
+================================================================================

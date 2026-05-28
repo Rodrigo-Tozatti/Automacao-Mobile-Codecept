@@ -1,0 +1,229 @@
+================================================================================
+VARIÁVEIS DE AMBIENTE - CONFIGURAÇÃO COMPLETA DO AMBIENTE (Apple Silicon M1/M2)
+================================================================================
+
+O QUE SÃO VARIÁVEIS DE AMBIENTE
+--------------------------------------------------------------------------------
+Variáveis de ambiente são configurações globais do sistema que informam ao
+terminal onde encontrar as ferramentas instaladas (Java, Android SDK, etc).
+Sem elas, o Appium e o CodeceptJS não conseguem localizar os recursos
+necessários para executar os testes.
+
+No macOS com Apple Silicon, o arquivo de configuração do terminal é o:
+    ~/.zshrc
+
+
+⚠️  LEIA ANTES DE COMEÇAR
+--------------------------------------------------------------------------------
+  - NUNCA adicione as variáveis de ambiente ao ~/.bash_profile no macOS
+    moderno. O shell padrão é o zsh e o arquivo correto é o ~/.zshrc.
+  - NUNCA duplique as linhas de export no arquivo. Se rodar o processo
+    duas vezes, verifique o arquivo com nano ~/.zshrc e remova as
+    duplicatas manualmente.
+  - A ordem das variáveis no arquivo importa. Sempre declare ANDROID_HOME
+    e JAVA_HOME antes de referenciá-los no PATH.
+  - Não altere nem remova as linhas do NVM que já existem no arquivo.
+    Elas são necessárias para o funcionamento do Node.js.
+  - Sempre execute source ~/.zshrc ou abra um novo terminal após editar
+    o arquivo para que as alterações sejam aplicadas.
+
+  Certifique-se de que as seguintes ferramentas já estão instaladas
+  antes de prosseguir:
+    ✔ Homebrew       (documento: HOMEBREW)
+    ✔ Node.js / NVM  (documento: NODE)
+    ✔ Java JDK 17    (documento: JAVA)
+    ✔ Android Studio com SDK instalado (documento: ANDROID STUDIO)
+
+  Sem essas instalações concluídas, as variáveis não terão para onde
+  apontar e os comandos de verificação retornarão erro.
+
+
+PASSO 1 — VERIFICAR SE O ARQUIVO .zshrc EXISTE
+--------------------------------------------------------------------------------
+No Terminal, execute:
+
+    ls -a ~ | grep .zshrc
+
+Se o arquivo existir, ele será listado. Caso não apareça, crie-o:
+
+    touch ~/.zshrc
+
+
+PASSO 2 — VERIFICAR E CORRIGIR PERMISSÕES DO ARQUIVO .zshrc
+--------------------------------------------------------------------------------
+Antes de editar o arquivo, verifique se você tem permissão de leitura
+e escrita. Sem as permissões corretas, o terminal retornará o erro:
+    zsh: permission denied: /Users/SEU_USUARIO/.zshrc
+
+Verifique as permissões atuais:
+
+    ls -la ~/.zshrc
+
+A saída mostrará algo como:
+    -rw-r--r--  1 rodrigo staff 512 ...  ← permissões corretas
+    ----------  1 rodrigo staff   0 ...  ← permissões incorretas (sem acesso)
+
+Se as permissões estiverem incorretas, corrija com o comando:
+
+    chmod 644 ~/.zshrc
+
+Se o chmod também retornar "permission denied", o arquivo pertence ao
+usuário root. Nesse caso, utilize:
+
+    sudo chmod 644 ~/.zshrc
+
+O terminal solicitará sua senha de administrador — isso é normal.
+
+Verifique novamente após a correção:
+
+    ls -la ~/.zshrc
+
+A saída correta deve ser:
+    -rw-r--r-- 1 SEU_USUARIO staff ...
+
+Onde:
+  rw-  → seu usuário tem leitura e escrita
+  r--  → demais usuários têm apenas leitura
+  r--  → grupo tem apenas leitura
+
+
+PASSO 3 — VERIFICAR O CAMINHO REAL DO ANDROID SDK
+--------------------------------------------------------------------------------
+Antes de editar o arquivo, confirme o caminho real do SDK no Android Studio:
+
+  1. Abra o Android Studio
+  2. Acesse: Settings → Languages & Frameworks → Android SDK
+  3. Anote o caminho exibido em "Android SDK Location"
+
+O caminho padrão no macOS é:
+    /Users/SEU_USUARIO/Library/Android/sdk
+
+Para descobrir seu nome de usuário via Terminal:
+
+    echo $HOME
+
+A saída será algo como: /Users/rodrigo
+O caminho completo do SDK será: /Users/rodrigo/Library/Android/sdk
+
+
+PASSO 4 — ABRIR O ARQUIVO .zshrc PARA EDIÇÃO
+--------------------------------------------------------------------------------
+No Terminal, execute:
+
+    nano ~/.zshrc
+
+O editor nano abrirá o arquivo diretamente no terminal.
+Use as setas do teclado para navegar até o final do arquivo.
+
+
+PASSO 5 — ADICIONAR O BLOCO DE VARIÁVEIS DE AMBIENTE
+--------------------------------------------------------------------------------
+Cole o bloco abaixo no FINAL do arquivo, após qualquer conteúdo existente.
+
+    # ── Java ──────────────────────────────────────────────────────────────────
+    export JAVA_HOME=$(/usr/libexec/java_home -v 17)
+    export PATH="$JAVA_HOME/bin:$PATH"
+
+    # ── Android SDK ───────────────────────────────────────────────────────────
+    export ANDROID_HOME=$HOME/Library/Android/sdk
+    export ANDROID_SDK_ROOT=$ANDROID_HOME
+    export PATH=$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH
+
+
+PASSO 6 — SALVAR E SAIR DO NANO
+--------------------------------------------------------------------------------
+Após colar o bloco de variáveis:
+
+  1. Salvar o arquivo:
+     Pressione  Control + O  e depois  Enter  para confirmar o nome do arquivo.
+
+  2. Sair do editor:
+     Pressione  Control + X
+
+
+PASSO 7 — APLICAR AS MUDANÇAS NO TERMINAL
+--------------------------------------------------------------------------------
+Para que as variáveis sejam carregadas na sessão atual do terminal, execute:
+
+    source ~/.zshrc
+
+
+PASSO 8 — VERIFICAÇÃO COMPLETA
+--------------------------------------------------------------------------------
+Execute os comandos abaixo um por vez e confira as saídas esperadas:
+
+  Java:
+    java -version
+    Esperado: openjdk version "17.x.x" ... (arm64)
+
+    echo $JAVA_HOME
+    Esperado: /Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home
+
+  Android SDK:
+    echo $ANDROID_HOME
+    Esperado: /Users/SEU_USUARIO/Library/Android/sdk
+
+    echo $ANDROID_SDK_ROOT
+    Esperado: mesmo caminho que ANDROID_HOME
+
+    adb --version
+    Esperado: Android Debug Bridge version X.X.X
+
+  Node.js (verificação adicional):
+    node -v
+    Esperado: v18.x.x ou v20.x.x
+
+    nvm --version
+    Esperado: 0.40.x
+
+
+REFERÊNCIA — ARQUIVO .zshrc COMPLETO ESPERADO
+--------------------------------------------------------------------------------
+Abaixo está um exemplo de como o arquivo ~/.zshrc deve ficar ao final
+de todas as configurações. As linhas do NVM são geradas automaticamente
+durante a instalação do NVM e já estarão presentes no arquivo.
+
+    # NVM - gerado automaticamente na instalação
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+    # ── Java ──────────────────────────────────────────────────────────────────
+    export JAVA_HOME=$(/usr/libexec/java_home -v 17)
+    export PATH="$JAVA_HOME/bin:$PATH"
+
+    # ── Android SDK ───────────────────────────────────────────────────────────
+    export ANDROID_HOME=$HOME/Library/Android/sdk
+    export ANDROID_SDK_ROOT=$ANDROID_HOME
+    export PATH=$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH
+
+
+SOLUÇÃO DE PROBLEMAS COMUNS
+--------------------------------------------------------------------------------
+Problema: zsh: permission denied: ~/.zshrc
+Solução:  Execute chmod 644 ~/.zshrc e tente novamente.
+          Se persistir, use sudo chmod 644 ~/.zshrc com sua senha de admin.
+
+Problema: comando não encontrado após configurar (command not found)
+Solução:  Execute source ~/.zshrc e tente novamente. Se persistir, verifique
+          se o bloco foi colado corretamente sem espaços extras no início
+          das linhas.
+
+Problema: java -version retorna versão errada
+Solução:  Verifique se o JDK 17 está instalado:
+          /usr/libexec/java_home -V
+          A saída deve listar o temurin-17 com arquitetura arm64.
+
+Problema: adb não encontrado após configurar ANDROID_HOME
+Solução:  Verifique se o caminho do SDK está correto:
+          ls $ANDROID_HOME/platform-tools
+          Se o diretório estiver vazio ou não existir, reinstale o
+          Platform-Tools pelo SDK Manager do Android Studio.
+
+Problema: variáveis somem após fechar o terminal
+Solução:  O bloco não foi salvo corretamente no ~/.zshrc. Repita os
+          passos 4, 5 e 6 e verifique o arquivo com:
+          cat ~/.zshrc
+
+
+================================================================================

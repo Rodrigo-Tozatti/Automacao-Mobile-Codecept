@@ -1,0 +1,186 @@
+================================================================================
+CODECEPTJS - CONFIGURAÇÃO DAS CAPABILITIES ANDROID (Apple Silicon M1/M2)
+================================================================================
+
+O QUE SÃO CAPABILITIES
+--------------------------------------------------------------------------------
+Capabilities são as configurações que informam ao Appium como e onde executar
+os testes. Elas definem a plataforma, versão, dispositivo, app e demais
+parâmetros necessários para que o Appium consiga se comunicar corretamente
+com o emulador ou dispositivo físico.
+
+IMPORTANTE: Neste documento configuraremos apenas as capabilities do Android.
+O CodeceptJS não suporta dois helpers Appium simultâneos no mesmo bloco de
+configuração. A configuração do iOS será realizada em um documento separado
+utilizando profiles, uma abordagem que permite alternar entre Android e iOS
+via linha de comando sem a necessidade de alterar o arquivo de configuração.
+
+
+⚠️  LEIA ANTES DE COMEÇAR
+--------------------------------------------------------------------------------
+  - Certifique-se de que o Appium está instalado e o driver uiautomator2
+    está instalado. (documento: APPIUM)
+  - O emulador Android deve estar criado no Android Studio antes de
+    prosseguir. (documento: ANDROID STUDIO)
+  - O arquivo .apk do app a ser testado deve estar disponível e acessível
+    no projeto antes de configurar as capabilities.
+  - O prefixo appium: nas capabilities é obrigatório no Appium 2.x.
+    Capabilities sem esse prefixo serão ignoradas ou causarão erros.
+
+
+PRÉ-REQUISITOS
+--------------------------------------------------------------------------------
+Confirme que os seguintes itens estão disponíveis antes de prosseguir:
+  ✔ Appium 2.x instalado com driver uiautomator2
+  ✔ Android Studio com emulador criado e funcional
+  ✔ Arquivo .apk do app disponível na pasta do projeto
+  ✔ codecept.conf.js criado na pasta do projeto (documento: CODECEPTJS)
+
+
+PASSO 1 — DESCOBRIR O NOME DO EMULADOR
+--------------------------------------------------------------------------------
+Abra o Android Studio e acesse o Device Manager. O nome exibido na lista
+de dispositivos é o valor a ser usado na capability appium:deviceName.
+
+Alternativamente, liste os emuladores disponíveis via Terminal:
+
+    emulator -list-avds
+
+A saída exibirá os nomes dos emuladores criados, por exemplo:
+    Rodrigo_-_Pixel_4_-_15.0
+
+
+PASSO 2 — DESCOBRIR O appPackage E appActivity DO APP
+--------------------------------------------------------------------------------
+O appPackage e appActivity identificam o app e a tela inicial a ser aberta
+pelo Appium. Para descobri-los:
+
+  1. Inicie o emulador pelo Android Studio ou pelo Terminal:
+
+         emulator -avd "Rodrigo - Pixel 4 - 15.0"
+
+  2. Instale o APK no emulador:
+
+         adb install /caminho/para/seu/app.apk
+
+  3. Abra o app manualmente no emulador.
+
+  4. Com o app aberto na tela inicial, execute no Terminal:
+
+         adb shell dumpsys window | grep -E 'mCurrentFocus|mFocusedApp'
+
+  A saída será similar a:
+    mCurrentFocus=Window{... u0 com.qazandoapp/com.qazandoapp.MainActivity}
+    mFocusedApp=ActivityRecord{... u0 com.qazandoapp/.MainActivity ...}
+
+  Extraia as informações:
+    appPackage  → com.qazandoapp
+    appActivity → com.qazandoapp.MainActivity
+
+
+PASSO 3 — CONFIGURAR O codecept.conf.js
+--------------------------------------------------------------------------------
+Abra o arquivo de configuração:
+
+    nano codecept.conf.js
+
+Substitua todo o conteúdo pelo bloco abaixo, ajustando os valores
+conforme o seu ambiente:
+
+    const { setHeadlessWhen, setCommonPlugins } = require('@codeceptjs/configure');
+
+    setHeadlessWhen(process.env.HEADLESS);
+
+    setCommonPlugins();
+
+    /** @type {CodeceptJS.MainConfig} */
+    exports.config = {
+      tests: './tests/*_test.js',
+      output: './output',
+      helpers: {
+        Appium: {
+          platform: 'Android',
+          desiredCapabilities: {
+            // ── Android ──────────────────────────────────────────────────
+            'platformName':                'Android',
+            'appium:platformVersion':      '15.0',
+            'appium:deviceName':           'Rodrigo - Pixel 4 - 15.0',
+            'appium:automationName':       'UiAutomator2',
+            'appium:app':                  '/caminho/para/seu/app.apk',
+            'appium:appPackage':           'com.qazandoapp',
+            'appium:appActivity':          'com.qazandoapp.MainActivity',
+            'appium:noReset':              false,
+            'appium:fullReset':            false,
+            'appium:newCommandTimeout':    300,
+            'appium:autoGrantPermissions': true,
+          }
+        }
+      },
+      include: {
+        I: './steps_file.js'
+      },
+      noGlobals: true,
+      plugins: {},
+      name: 'Automacao-Mobile-Codecept'
+    }
+
+Salve e saia do nano:
+
+    Control + O → Enter → Control + X
+
+
+REFERÊNCIA — DESCRIÇÃO DAS CAPABILITIES
+--------------------------------------------------------------------------------
+  platformName            → Nome da plataforma (Android ou iOS)
+  appium:platformVersion  → Versão do Android do emulador ou dispositivo
+  appium:deviceName       → Nome do emulador ou dispositivo físico
+  appium:automationName   → Driver de automação (UiAutomator2 para Android)
+  appium:app              → Caminho completo do arquivo .apk
+  appium:appPackage       → Identificador único do app no Android
+  appium:appActivity      → Activity inicial do app (tela de entrada)
+  appium:noReset          → false = reinstala o app a cada sessão
+  appium:fullReset        → false = não limpa dados do dispositivo
+  appium:newCommandTimeout→ Tempo máximo (segundos) sem comandos antes
+                            de encerrar a sessão automaticamente
+  appium:autoGrantPermissions → true = aceita permissões automaticamente
+
+
+VERIFICAÇÃO
+--------------------------------------------------------------------------------
+Com o emulador rodando e o servidor Appium iniciado em outro terminal:
+
+    appium
+
+Execute os testes para validar a configuração:
+
+    npx codeceptjs run --steps
+
+A saída deve iniciar sem erros de configuração e o Appium deve conseguir
+abrir o app no emulador.
+
+
+SOLUÇÃO DE PROBLEMAS COMUNS
+--------------------------------------------------------------------------------
+Problema: An unknown server-side error - could not find adb
+Solução:  Verifique se o ANDROID_HOME está configurado corretamente:
+            echo $ANDROID_HOME
+            adb --version
+          Consulte o documento: VARIÁVEIS DE AMBIENTE
+
+Problema: Could not find a connected Android device
+Solução:  Verifique se o emulador está rodando:
+            adb devices
+          A saída deve listar o emulador com status "device".
+
+Problema: App not installed / Unable to install app
+Solução:  Verifique se o caminho do .apk está correto na capability
+          appium:app e se o arquivo existe:
+            ls /caminho/para/seu/app.apk
+
+Problema: appActivity not found
+Solução:  Verifique o appPackage e appActivity com o app aberto
+          no emulador:
+            adb shell dumpsys window | grep -E 'mCurrentFocus|mFocusedApp'
+
+
+================================================================================
