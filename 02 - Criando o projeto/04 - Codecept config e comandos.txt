@@ -1,0 +1,163 @@
+================================================================================
+CODECEPTJS - CONFIGURAÇÃO DE VARIÁVEIS DE AMBIENTE E EXECUÇÃO POR PLATAFORMA
+================================================================================
+
+O QUE É ESSA CONFIGURAÇÃO
+--------------------------------------------------------------------------------
+Para evitar a necessidade de alterar o arquivo codecept.conf.js a cada vez
+que for necessário alternar entre Android e iOS, utilizamos variáveis de
+ambiente passadas diretamente na linha de comando. Dessa forma, o mesmo
+arquivo de configuração atende ambas as plataformas dinamicamente.
+
+
+⚠️  LEIA ANTES DE COMEÇAR
+--------------------------------------------------------------------------------
+  - Sempre que um valor de variável de ambiente contiver espaços, envolva-o
+    em aspas duplas. Exemplo: DEVICE="Rodrigo - Pixel 4 - 15.0"
+  - O emulador Android ou simulador iOS deve estar rodando antes de
+    executar os testes.
+  - O servidor Appium deve estar rodando em outro terminal antes de
+    executar os testes:
+      appium
+  - O arquivo codecept.conf.js deve estar configurado conforme descrito
+    neste documento antes de executar os comandos de teste.
+  - Nunca execute os testes sem o Appium rodando — o teste passará sem
+    abrir o app, mascarando erros de conexão.
+
+
+PASSO 1 — ATUALIZAR O ARQUIVO codecept.conf.js
+--------------------------------------------------------------------------------
+Abra o arquivo de configuração:
+
+    nano codecept.conf.js
+
+Substitua todo o conteúdo pelo bloco abaixo:
+
+    const { setHeadlessWhen, setCommonPlugins } = require('@codeceptjs/configure');
+
+    setHeadlessWhen(process.env.HEADLESS);
+
+    setCommonPlugins();
+
+    /** @type {CodeceptJS.MainConfig} */
+    exports.config = {
+      tests: './tests/*_test.js',
+      output: './output',
+      helpers: {
+        Appium: {
+          platform: process.env.PLATAFORM,
+          hostname: '127.0.0.1',
+          port: 4723,
+          path: '/',
+          desiredCapabilities: {
+            'platformName':                process.env.PLATAFORM,
+            'appium:platformVersion':      process.env.VERSION,
+            'appium:deviceName':           process.env.DEVICE,
+            'appium:udid':                 process.env.UDID,
+            'appium:automationName':       process.env.AUTOMATION,
+            'appium:app':                  process.env.APP,
+            'appium:appPackage':           process.env.PLATAFORM == 'Android' ? process.env.PACKAGE : '',
+            'appium:appActivity':          process.env.PLATAFORM == 'Android' ? process.env.ACTIVITY : '',
+            'appium:bundleId':             process.env.PLATAFORM == 'iOS' ? process.env.BUNDLE : '',
+            'appium:noReset':              false,
+            'appium:fullReset':            false,
+            'appium:newCommandTimeout':    300,
+            'appium:autoGrantPermissions': true,
+          }
+        }
+      },
+      include: {
+        I: './steps_file.js'
+      },
+      noGlobals: true,
+      plugins: {},
+      name: 'Automacao-Mobile-Codecept'
+    }
+
+Salve e saia do nano:
+
+    Control + O → Enter → Control + X
+
+
+PASSO 2 — ATUALIZAR O ARQUIVO package.json
+--------------------------------------------------------------------------------
+Abra o arquivo package.json:
+
+    nano package.json
+
+Localize a seção scripts e substitua pelo bloco abaixo:
+
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "teste": "npx codeceptjs run --steps",
+      "android": "PLATAFORM=Android VERSION=15.0 DEVICE=\"Rodrigo - Pixel 4 - 15.0\" AUTOMATION=UiAutomator2 APP=/Users/rodrigorossetitozatti/MacBook-repositorio/Automacao-Mobile-Codecept/app/Android/app-release.apk PACKAGE=com.qazandoapp ACTIVITY=com.qazandoapp.MainActivity npm run teste",
+      "ios": "PLATAFORM=iOS VERSION=18.2 DEVICE=\"iPhone 16 Pro\" UDID=F9C7538C-FF3D-46EF-A5C0-3723A78025DF AUTOMATION=XCUITest APP=/Users/rodrigorossetitozatti/MacBook-repositorio/Automacao-Mobile-Codecept/app/iOS/qazandoapp.app BUNDLE=org.reactjs.native.example.qazandoapp npm run teste"
+    },
+
+Salve e saia do nano:
+
+    Control + O → Enter → Control + X
+
+
+PASSO 3 — EXECUTANDO OS TESTES POR PLATAFORMA
+--------------------------------------------------------------------------------
+Após configurar o package.json, utilize os atalhos abaixo para executar
+os testes em cada plataforma:
+
+  Android:
+    npm run android
+
+  iOS:
+    npm run ios
+
+
+REFERÊNCIA — DESCRIÇÃO DAS VARIÁVEIS DE AMBIENTE
+--------------------------------------------------------------------------------
+  PLATAFORM   → Plataforma a ser testada (Android ou iOS)
+  VERSION     → Versão do sistema operacional do dispositivo ou emulador
+  DEVICE      → Nome do emulador ou simulador
+  UDID        → Identificador único do dispositivo (obrigatório para iOS)
+  AUTOMATION  → Driver de automação (UiAutomator2 para Android,
+                XCUITest para iOS)
+  APP         → Caminho completo do arquivo .apk (Android) ou .app (iOS)
+  PACKAGE     → Identificador do app no Android (appPackage)
+  ACTIVITY    → Tela inicial do app no Android (appActivity)
+  BUNDLE      → Identificador do app no iOS (bundleId)
+
+
+VERIFICAÇÃO
+--------------------------------------------------------------------------------
+Com o emulador ou simulador rodando e o Appium iniciado em outro terminal,
+execute o comando da plataforma desejada e verifique:
+
+  ✔ O app deve abrir no emulador ou simulador
+  ✔ O terminal deve exibir os steps executados
+  ✔ Ao final deve aparecer: OK | X passed
+
+
+SOLUÇÃO DE PROBLEMAS COMUNS
+--------------------------------------------------------------------------------
+Problema: zsh: command not found ao executar o comando
+Solução:  Verifique se há espaços nos valores das variáveis sem aspas.
+          Sempre envolva valores com espaços em aspas duplas.
+
+Problema: Teste passa mas o app não abre
+Solução:  O Appium não está rodando. Inicie o servidor em outro terminal:
+            appium
+          Verifique também se o emulador ou simulador está ativo:
+            adb devices          (Android)
+            xcrun simctl list devices | grep Booted  (iOS)
+
+Problema: Could not find a connected device
+Solução:  Verifique se o UDID está correto para iOS:
+            xcrun simctl list devices | grep "iPhone 16 Pro"
+          Verifique se o emulador está rodando para Android:
+            adb devices
+
+Problema: App not installed
+Solução:  Verifique se o caminho do APP está correto e se o arquivo
+          existe na pasta informada:
+            ls /caminho/para/seu/app
+
+
+================================================================================

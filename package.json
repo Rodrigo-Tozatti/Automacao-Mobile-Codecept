@@ -18,7 +18,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "teste": "npx codeceptjs run --steps",
     "android": "PLATAFORM=Android VERSION=15.0 DEVICE=\"Rodrigo - Pixel 4 - 15.0\" AUTOMATION=UiAutomator2 APP=/Users/rodrigorossetitozatti/MacBook-repositorio/Automacao-Mobile-Codecept/app/Android/app-release.apk PACKAGE=com.qazandoapp ACTIVITY=com.qazandoapp.MainActivity npm run teste",
-    "ios": "PLATAFORM=iOS VERSION=18.2 DEVICE=\"iPhone 16 Pro\" UDID=F9C7538C-FF3D-46EF-A5C0-3723A78025DF AUTOMATION=XCUITest APP=/Users/rodrigorossetitozatti/MacBook-repositorio/Automacao-Mobile-Codecept/app/iOS/qazandoapp.app BUNDLE=org.reactjs.native.example.qazandoapp npm run teste"
+    "ios": "PLATAFORM=iOS VERSION=18.2 DEVICE=\"iPhone 16 Pro\" UDID=F9C7538C-FF3D-46EF-A5C0-3723A78025DF AUTOMATION=XCUITest APP=/Users/rodrigorossetitozatti/MacBook-repositorio/Automacao-Mobile-Codecept/app/iOS/qazandoapp.app BUNDLE=org.reactjs.native.example.qazandoapp npm run teste",
+    "gt": "PLATAFORM=Android APP=/Users/rodrigorossetitozatti/MacBook-repositorio/Automacao-Mobile-Codecept/app/Android/app-release.apk npx codeceptjs gt"
   },
   "devDependencies": {
     "codeceptjs": "^4.0.2",
