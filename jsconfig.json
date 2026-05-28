@@ -1,11 +1,10 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "checkJs": false,
-    "ignoreDeprecations": "6.0"
+    "checkJs": true
   },
   "include": [
-    "./node_modules/codeceptjs/typings",
+    "./node_modules/codeceptjs/typings/index.d.ts",
     "./steps.d.ts",
     "./**/*_test.js",
     "./steps_file.js"
