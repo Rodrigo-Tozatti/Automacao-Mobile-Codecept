@@ -1,4 +1,7 @@
-const { setHeadlessWhen, setCommonPlugins } = require('@codeceptjs/configure');
+const {
+  setHeadlessWhen,
+  setCommonPlugins
+} = require('@codeceptjs/configure');
 
 setHeadlessWhen(process.env.HEADLESS);
 
@@ -15,24 +18,26 @@ exports.config = {
       port: 4723,
       path: '/',
       desiredCapabilities: {
-        'platformName':                process.env.PLATAFORM,
-        'appium:platformVersion':      process.env.VERSION,
-        'appium:deviceName':           process.env.DEVICE,
-        'appium:udid':                 process.env.UDID,
-        'appium:automationName':       process.env.AUTOMATION,
-        'appium:app':                  process.env.APP,
-        'appium:appPackage':           process.env.PLATAFORM == 'Android' ? process.env.PACKAGE : '',
-        'appium:appActivity':          process.env.PLATAFORM == 'Android' ? process.env.ACTIVITY : '',
-        'appium:bundleId':             process.env.PLATAFORM == 'iOS' ? process.env.BUNDLE : '',
-        'appium:noReset':              false,
-        'appium:fullReset':            false,
-        'appium:newCommandTimeout':    300,
+        'platformName': process.env.PLATAFORM,
+        'appium:platformVersion': process.env.VERSION,
+        'appium:deviceName': process.env.DEVICE,
+        'appium:udid': process.env.UDID,
+        'appium:automationName': process.env.AUTOMATION,
+        'appium:app': process.env.APP,
+        'appium:appPackage': process.env.PLATAFORM == 'Android' ? process.env.PACKAGE : '',
+        'appium:appActivity': process.env.PLATAFORM == 'Android' ? process.env.ACTIVITY : '',
+        'appium:bundleId': process.env.PLATAFORM == 'iOS' ? process.env.BUNDLE : '',
+        'appium:noReset': false,
+        'appium:fullReset': false,
+        'appium:newCommandTimeout': 300,
         'appium:autoGrantPermissions': true,
       }
     }
   },
   include: {
-    I: './steps_file.js'
+    I: './steps_file.js',
+
+    loginPages: "./pages/loginPages.js",
   },
   noGlobals: true,
   plugins: {},
